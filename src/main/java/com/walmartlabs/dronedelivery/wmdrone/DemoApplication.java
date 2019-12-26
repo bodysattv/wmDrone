@@ -2,6 +2,7 @@ package com.walmartlabs.dronedelivery.wmdrone;
 
 import java.io.IOException;
 
+import com.walmartlabs.dronedelivery.wmdrone.exception.BadInputFileException;
 import com.walmartlabs.dronedelivery.wmdrone.service.InputFileParser;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +31,15 @@ public class DemoApplication {
 	public void parse(String filePath) {
 		try {
 			parserService.readFromInputFile(filePath).forEach(System.out::println);
+			try {
+				parserService.convertToInputDataList(parserService.readFromInputFile(filePath));
+			} catch (BadInputFileException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    }
+	}
 }
-	
