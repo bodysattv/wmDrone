@@ -7,19 +7,28 @@ public class InputData {
 
     private String id;
     private String location;
-    private int timeToLocation;
+    private Integer timeToLocation;
     private String timeStampStr;
     private LocalTime timeStamp;
+    private String tag;
 
     public String getId() {
         return id;
     }
 
-    public int getTimeToLocation() {
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
+    public Integer getTimeToLocation() {
         return timeToLocation;
     }
 
-    public void setTimeToLocation(int timeToLocation) {
+    public void setTimeToLocation(Integer timeToLocation) {
         this.timeToLocation = timeToLocation;
     }
 
@@ -51,4 +60,8 @@ public class InputData {
         this.location = location;
     }
 
+
+    public String toString() {
+        return ( id + " " + timeToLocation + " " + timeStampStr);
+}
 }

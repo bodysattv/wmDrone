@@ -74,7 +74,7 @@ public class InputFileParser {
     }
     datum.setTimeToLocation(timeToLocation);
     logger.debug(new Gson().toJson(datum));
-    System.out.print(new Gson().toJson(datum));
+ //   System.out.print(new Gson().toJson(datum));
     return datum;
   }
 
