@@ -1,12 +1,11 @@
 package com.walmartlabs.dronedelivery.wmdrone;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import com.walmartlabs.dronedelivery.wmdrone.exception.BadInputFileException;
+import com.walmartlabs.dronedelivery.wmdrone.service.DeliveryLaunchCalcualtion;
 import com.walmartlabs.dronedelivery.wmdrone.service.InputFileParser;
-import com.walmartlabs.dronedelivery.wmdrone.util.DeliveryComparator;
-import com.walmartlabs.dronedelivery.wmdrone.domain.InputData;
+import com.walmartlabs.dronedelivery.wmdrone.domain.OrderData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,6 +18,9 @@ public class DemoApplication {
 
 	@Autowired
 	private InputFileParser parserService;
+
+	@Autowired
+	private DeliveryLaunchCalcualtion delCal;
 
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
@@ -33,17 +35,14 @@ public class DemoApplication {
 	public void parse(String filePath) {
 		try {
 			parserService.readFromInputFile(filePath).forEach(System.out::println);
-			try {
-				List<InputData> input = parserService.convertToInputDataList(parserService
-				.readFromInputFile(filePath));
-				input.forEach(System.out::println);
-				
-				Collections.sort(input, new DeliveryComparator());
-				input.forEach(System.out::println);
-			} catch (BadInputFileException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			List<OrderData> input = parserService.convertToOrderDataList(parserService.readFromInputFile(filePath));
+			input.forEach(System.out::println);
+
+			delCal.tagInput(input);
+
+		} catch (BadInputFileException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

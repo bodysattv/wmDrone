@@ -3,24 +3,29 @@ package com.walmartlabs.dronedelivery.wmdrone.domain;
 
 import java.time.LocalTime;
 
-public class InputData {
 
+
+public class OrderData {
+
+    public enum Tag {
+        PROMOTER, NUETRAL, DETRACTOR;
+    }
     private String id;
     private String location;
     private Integer timeToLocation;
     private String timeStampStr;
     private LocalTime timeStamp;
-    private String tag;
+    private Tag tag;
 
     public String getId() {
         return id;
     }
 
-    public String getTag() {
+    public Tag getTag() {
         return tag;
     }
 
-    public void setTag(String tag) {
+    public void setTag(Tag tag) {
         this.tag = tag;
     }
 
@@ -62,6 +67,6 @@ public class InputData {
 
 
     public String toString() {
-        return ( id + " " + timeToLocation + " " + timeStampStr);
+        return ( id + " " + timeToLocation + " " + timeStampStr + " " + tag);
 }
 }

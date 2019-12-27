@@ -6,12 +6,10 @@ import java.io.IOException;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import com.google.gson.Gson;
-import com.walmartlabs.dronedelivery.wmdrone.domain.InputData;
+import com.walmartlabs.dronedelivery.wmdrone.domain.OrderData;
 import com.walmartlabs.dronedelivery.wmdrone.exception.BadInputFileException;
 
 import org.slf4j.Logger;
@@ -23,36 +21,37 @@ public class InputFileParser {
 
   Logger logger = LoggerFactory.getLogger(InputFileParser.class);
 
-  public Set<String> readFromInputFile(final String filePath) throws IOException {
+  public List<String> readFromInputFile(final String filePath) throws IOException, BadInputFileException {
 
-    final Set<String> orderSet = new HashSet<String>();
+    final List<String> inputLines = new ArrayList<String>();
 
     try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
       String line;
       while ((line = br.readLine()) != null) {
-        orderSet.add(line);
+        inputLines.add(line);
       }
     }
-    return orderSet;
-  }
-
-  public List<InputData> convertToInputDataList(final Set<String> orderSet) throws BadInputFileException {
-
-    final List<InputData> inputList = new ArrayList<InputData>();
-
-    // orderSet.forEach((order -> inputList.add(convertedData(order))));
-
-    for (final String order : orderSet) {
-      inputList.add(convertedData(order));
+    if(inputLines.size()==0){
+      throw new BadInputFileException("Input file does not data");
     }
+    
+    return inputLines;
+  }
 
-    return inputList;
+  public List<OrderData> convertToOrderDataList(final List<String> inputLines) throws BadInputFileException {
+
+    final List<OrderData> orderList = new ArrayList<OrderData>();
+
+    for (final String order : inputLines) {
+      orderList.add(convertedData(order));
+    }
+    return orderList;
 
   }
 
-  private InputData convertedData(final String order)
+  private OrderData convertedData(final String order)
       throws BadInputFileException, DateTimeParseException, NumberFormatException {
-    final InputData datum = new InputData();
+    final OrderData datum = new OrderData();
     final String[] fields = order.split(" ");
     if (fields.length != 3) {
       throw new BadInputFileException("Input file does not have all data in 3 columns");
