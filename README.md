@@ -1,6 +1,23 @@
 # wmDrone
 Walmart Drone Delivery
 
+Build:
+mvn clean install -DskipTests
+
+it will generate an executable jar in the target folder
+
+Run: 
+java -jar target/wmdrone-0.0.1-SNAPSHOT.jar
+
+This will create a shell promt for command line interface
+
+Example run from the command prompt:
+
+To create a mock test file:
+shell:> create-mock-input --n 20 --max-steps 20 --min-hour 03 --max-hour 11
+
+To run the launch schedule program
+create-schedule <path/to/repo>/wmDrone/src/main/resources/mock-input.txt
 
 Delivery Satisfaction Problem
 	Grid village
