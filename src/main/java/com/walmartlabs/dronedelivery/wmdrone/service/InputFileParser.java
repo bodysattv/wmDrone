@@ -1,6 +1,7 @@
 package com.walmartlabs.dronedelivery.wmdrone.service;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalTime;
@@ -16,11 +17,44 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+/**
+ * This class deals with the input file for parsing and validity checks
+ */
 @Service
 public class InputFileParser {
 
   Logger logger = LoggerFactory.getLogger(InputFileParser.class);
 
+  /**
+   * Create an output file name. Exception if input file does not exist.
+   * 
+   * @param filePath
+   * @return
+   * @throws BadInputFileException
+   */
+  public String getOutputFileName(final String filePath) throws BadInputFileException {
+
+    final File inputFile = new File(filePath);
+    String outputFilePath = "";
+    if (inputFile.exists()) {
+
+      outputFilePath = new StringBuilder(inputFile.getParent()).append("/output.for.").append(inputFile.getName())
+          .toString();
+      System.out.print(outputFilePath);
+    } else {
+      throw new BadInputFileException("Input file does not exists");
+    }
+    return outputFilePath;
+  }
+
+  /**
+   * read the input file into a list or lines. Exception if input file is empty
+   * 
+   * @param filePath
+   * @return
+   * @throws IOException
+   * @throws BadInputFileException
+   */
   public List<String> readFromInputFile(final String filePath) throws IOException, BadInputFileException {
 
     final List<String> inputLines = new ArrayList<String>();
@@ -31,13 +65,20 @@ public class InputFileParser {
         inputLines.add(line);
       }
     }
-    if(inputLines.size()==0){
-      throw new BadInputFileException("Input file does not data");
+    if (inputLines.size() == 0) {
+      throw new BadInputFileException("Input file does not have data");
     }
-    
+
     return inputLines;
   }
 
+  /**
+   * Convert list of lines to list of orders.
+   *
+   * @param inputLines
+   * @return
+   * @throws BadInputFileException
+   */
   public List<OrderData> convertToOrderDataList(final List<String> inputLines) throws BadInputFileException {
 
     final List<OrderData> orderList = new ArrayList<OrderData>();
@@ -49,6 +90,16 @@ public class InputFileParser {
 
   }
 
+  /**
+   * Takes each lines from the input and convert into an order object. Exception
+   * if input entry is corrupted.
+   * 
+   * @param order
+   * @return
+   * @throws BadInputFileException
+   * @throws DateTimeParseException
+   * @throws NumberFormatException
+   */
   private OrderData convertedData(final String order)
       throws BadInputFileException, DateTimeParseException, NumberFormatException {
     final OrderData datum = new OrderData();
@@ -73,8 +124,17 @@ public class InputFileParser {
     }
     datum.setTimeToLocation(timeToLocation);
     logger.debug(new Gson().toJson(datum));
- //   System.out.print(new Gson().toJson(datum));
+    // System.out.print(new Gson().toJson(datum));
     return datum;
   }
+
+  /**
+   * 
+   * @param n
+   * @return
+   */
+public String createMockInput(int n) {
+	return null;
+}
 
 }
