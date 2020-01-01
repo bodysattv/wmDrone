@@ -3,7 +3,7 @@ package com.walmartlabs.dronedelivery.wmdrone;
 import java.io.IOException;
 import com.walmartlabs.dronedelivery.wmdrone.exception.BadInputFileException;
 import com.walmartlabs.dronedelivery.wmdrone.service.DeliveryLaunchCalcualtion;
-import com.walmartlabs.dronedelivery.wmdrone.util.InputFileParser;
+import com.walmartlabs.dronedelivery.wmdrone.util.FileReadWriteUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,9 +17,6 @@ import org.springframework.shell.standard.ShellMethod;
 @SpringBootApplication
 @ShellComponent
 public class WalmartDemoApplicationCommands {
-
-	@Autowired
-	private InputFileParser parserService;
 
 	@Autowired
 	private DeliveryLaunchCalcualtion delCal;
@@ -57,8 +54,8 @@ public class WalmartDemoApplicationCommands {
 	 */
 	@ShellMethod("<n> (Creates mock n inputs in a file)")
 	public String createMockInput(final int n) {
-
-		return parserService.createMockInput(n);
+        final FileReadWriteUtil fileUtil = new FileReadWriteUtil();
+		return fileUtil.createMockInput(n);
 	}
 
 }

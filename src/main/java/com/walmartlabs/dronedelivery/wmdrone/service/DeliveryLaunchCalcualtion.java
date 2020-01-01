@@ -3,17 +3,15 @@ package com.walmartlabs.dronedelivery.wmdrone.service;
 import com.walmartlabs.dronedelivery.wmdrone.domain.OrderData;
 import com.walmartlabs.dronedelivery.wmdrone.exception.BadInputFileException;
 import com.walmartlabs.dronedelivery.wmdrone.util.DeliveryComparator;
+import com.walmartlabs.dronedelivery.wmdrone.util.FileReadWriteUtil;
 import com.walmartlabs.dronedelivery.wmdrone.util.InputFileParser;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 
@@ -51,10 +49,12 @@ public class DeliveryLaunchCalcualtion {
     public String generateOptimizedSequence(final String filePath) throws BadInputFileException, IOException {
 
         String outputFilePath = "";
+        final FileReadWriteUtil fileUtil = new FileReadWriteUtil();
         try {
             outputFilePath = parserService.getOutputFileName(filePath);
-            parserService.readFromInputFile(filePath).forEach(System.out::println);
-            List<OrderData> inputList = parserService.convertToOrderDataList(parserService.readFromInputFile(filePath));
+            fileUtil.readFromInputFile(filePath).forEach(System.out::println);
+            final List<OrderData> inputList = parserService
+                    .convertToOrderDataList(fileUtil.readFromInputFile(filePath));
 
             inputList.forEach(System.out::println);
 
@@ -68,7 +68,7 @@ public class DeliveryLaunchCalcualtion {
             calculateLaunchTime(inputList, firstLaunchTime);
 
             // generate the output file
-            generateOutput(inputList, outputFilePath);
+            fileUtil.generateOutput(inputList, outputFilePath);
 
         } catch (final BadInputFileException e) {
             e.printStackTrace();
@@ -79,38 +79,6 @@ public class DeliveryLaunchCalcualtion {
 
     }
 
-    /**
-     * generate the output file
-     * 
-     * @param orderList
-     * @param fileName
-     * @throws IOException
-     */
-    private void generateOutput(final List<OrderData> orderList, final String fileName) throws IOException {
-        Integer numberOfPromoters = 0;
-        Integer numberOfDertactors = 0;
-        final BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
-        for (final OrderData input : orderList) {
-            final String outputLine = new StringBuilder(input.getId()).append(" ")
-                    .append(input.getLaunchTime().format(DateTimeFormatter.ISO_LOCAL_TIME)).toString();
-
-            if (input.getTag().equals(OrderData.Tag.PROMOTER)) {
-                numberOfPromoters += 1;
-            } else if (input.getTag().equals(OrderData.Tag.DETRACTOR)) {
-                numberOfDertactors += 1;
-            }
-
-            writer.write(outputLine + "\n");
-
-        }
-        // write NPS calculation
-        Integer npsValue = (numberOfPromoters - numberOfDertactors) * 100 / orderList.size();
-        String npsLine = new StringBuilder("NPS ").append(npsValue).toString();
-        writer.write(npsLine);
-
-        writer.close();
-
-    }
 
     /**
      * calculate lauch time for each order in the list

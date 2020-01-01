@@ -1,9 +1,6 @@
 package com.walmartlabs.dronedelivery.wmdrone.util;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -25,6 +22,8 @@ public class InputFileParser {
 
   Logger logger = LoggerFactory.getLogger(InputFileParser.class);
 
+  private FileReadWriteUtil fileUtil = new FileReadWriteUtil();
+
   /**
    * Create an output file name. Exception if input file does not exist.
    * 
@@ -45,31 +44,6 @@ public class InputFileParser {
       throw new BadInputFileException("Input file does not exists");
     }
     return outputFilePath;
-  }
-
-  /**
-   * read the input file into a list or lines. Exception if input file is empty
-   * 
-   * @param filePath
-   * @return
-   * @throws IOException
-   * @throws BadInputFileException
-   */
-  public List<String> readFromInputFile(final String filePath) throws IOException, BadInputFileException {
-
-    final List<String> inputLines = new ArrayList<String>();
-
-    try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-      String line;
-      while ((line = br.readLine()) != null) {
-        inputLines.add(line);
-      }
-    }
-    if (inputLines.size() == 0) {
-      throw new BadInputFileException("Input file does not have data");
-    }
-
-    return inputLines;
   }
 
   /**
