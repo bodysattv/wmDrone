@@ -17,16 +17,16 @@ Delivery Satisfaction Problem
 Assumptions
 	       
    1. There is no advantage in maintaining any sequence within promoter's, neutral's or detractor's delivery.
-		Basis: The points within a category/bin does not enter in NPR calculation. 
-		Consequence: Input data can be tagged into three categories bins. These entries may have tag spill over during the hueristic calculation. Problem boils down to put as many entries into 'promoter' and then to 'neutral' from NPR pov.
-			If total number of entries is N; p is number of promoters and n is number of neutrals, then NPR = (p-(N-p-n))*100/N = 100*(-1+(2*p+n)/N)
+		Basis: The points within a category/bin does not enter in NPS calculation. 
+		Consequence: Input data can be tagged into three categories bins. These entries may have tag spill over during the hueristic calculation. Problem boils down to put as many entries into 'promoter' and then to 'neutral' from NPS pov.
+			If total number of entries is N; p is number of promoters and n is number of neutrals, then NPS = (p-(N-p-n))*100/N = 100*(-1+(2*p+n)/N)
 
    2. Input is coming at the begining of delivery as a flat file(its not a stream), it is available just after the last order entry. And file time-stamp range is between 00:00:00 to 23:59:59 (belonging to the same day)
 		Basis: Stream is not mentioned. In the example, the last delivery timestamp is after 6AM, so the file can be assumend to come at anytime before 10PM. 
 Consequence: 
 		Inital tagging.
 		00----------03------06-------------------------------------------22----------24
-	        <------>                                                        <------>   NPR=-100 Case  
+	        <------>                                                        <------>   NPS=-100 Case  
 			1. All orders 3 hours before last order are detractors. 
 			2. last order if placed 3 hours before 6 AM, all are detractors.  
 			3. first order if placed after 10 PM, all are detractors.
@@ -53,6 +53,6 @@ Consequence:
 			5. 
 
 
-   total NPR = Deivery in 
+   total NPS = Deivery in 
    h<sub>&theta;</sub>(x) = &theta;<sub>o</sub> x + &theta;<sub>1</sub>x
 &sum;<sub>i=0</sub>

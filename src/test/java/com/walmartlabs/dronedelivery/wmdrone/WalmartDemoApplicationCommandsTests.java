@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.walmartlabs.dronedelivery.wmdrone.exception.BadInputFileException;
-import com.walmartlabs.dronedelivery.wmdrone.service.InputFileParser;
+import com.walmartlabs.dronedelivery.wmdrone.util.InputFileParser;
 import static org.hamcrest.Matchers.hasItems;
 import org.hamcrest.core.IsNull;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DemoApplicationTests {
+class WalmartDemoApplicationCommandsTests {
 
 	@Autowired
 	private InputFileParser parserService;

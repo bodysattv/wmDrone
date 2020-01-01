@@ -1,4 +1,4 @@
-package com.walmartlabs.dronedelivery.wmdrone.service;
+package com.walmartlabs.dronedelivery.wmdrone.util;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -15,12 +15,12 @@ import com.walmartlabs.dronedelivery.wmdrone.exception.BadInputFileException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 /**
  * This class deals with the input file for parsing and validity checks
  */
-@Service
+@Component
 public class InputFileParser {
 
   Logger logger = LoggerFactory.getLogger(InputFileParser.class);
@@ -134,6 +134,9 @@ public class InputFileParser {
    * @return
    */
 public String createMockInput(int n) {
+  String filePath = "src/main/resources/";
+  StringBuilder filePathBldr = new StringBuilder(filePath);
+  
 	return null;
 }
 

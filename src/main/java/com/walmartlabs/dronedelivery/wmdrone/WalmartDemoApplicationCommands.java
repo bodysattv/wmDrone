@@ -1,11 +1,9 @@
 package com.walmartlabs.dronedelivery.wmdrone;
 
 import java.io.IOException;
-import java.util.List;
 import com.walmartlabs.dronedelivery.wmdrone.exception.BadInputFileException;
 import com.walmartlabs.dronedelivery.wmdrone.service.DeliveryLaunchCalcualtion;
-import com.walmartlabs.dronedelivery.wmdrone.service.InputFileParser;
-import com.walmartlabs.dronedelivery.wmdrone.domain.OrderData;
+import com.walmartlabs.dronedelivery.wmdrone.util.InputFileParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -42,27 +40,13 @@ public class WalmartDemoApplicationCommands {
 	 * 
 	 * @param filePath
 	 * @return
+	 * @throws IOException
+	 * @throws BadInputFileException
 	 */
 	@ShellMethod("</path/to/file> (Creates the output file with launch schedule and NPS)")
-	public String createSchedule(final String filePath) {
-		String outputFilePath = "";
-		try {
-			outputFilePath = parserService.getOutputFileName(filePath);
-			parserService.readFromInputFile(filePath).forEach(System.out::println);
-			final List<OrderData> inputList = parserService
-					.convertToOrderDataList(parserService.readFromInputFile(filePath));
+	public String createSchedule(final String filePath) throws BadInputFileException, IOException {
 
-			inputList.forEach(System.out::println);
-
-			delCal.generateOptimizedSequence(inputList, outputFilePath);
-			// delCal.tagInput(inputList);
-
-		} catch (final BadInputFileException e) {
-			e.printStackTrace();
-		} catch (final IOException e) {
-			e.printStackTrace();
-		}
-		return outputFilePath;
+		return delCal.generateOptimizedSequence(filePath);
 	}
 
 	/**

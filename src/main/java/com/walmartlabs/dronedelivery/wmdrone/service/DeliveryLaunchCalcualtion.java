@@ -1,8 +1,11 @@
 package com.walmartlabs.dronedelivery.wmdrone.service;
 
 import com.walmartlabs.dronedelivery.wmdrone.domain.OrderData;
+import com.walmartlabs.dronedelivery.wmdrone.exception.BadInputFileException;
 import com.walmartlabs.dronedelivery.wmdrone.util.DeliveryComparator;
+import com.walmartlabs.dronedelivery.wmdrone.util.InputFileParser;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +18,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * This class has calls to calculate sequence of delivery to optimize NPR.
+ * This class has calls to calculate sequence of delivery to optimize NPS.
  * 
  */
 
@@ -34,27 +37,45 @@ public class DeliveryLaunchCalcualtion {
     @Value("${delivery.interval.neutral.max}")
     private Integer timeNeutralMax;
 
+    @Autowired
+    private InputFileParser parserService;
+
     /**
      * This is entry method of the class where it gets the order list and write the
-     * calculate sequence and resulatant NPR in a file.
+     * calculate sequence and resulatant NPS in a file.
      * 
      * @param orderList
      * @param filePath
      * @throws IOException
      */
-    public void generateOptimizedSequence(final List<OrderData> orderList, final String filePath) throws IOException {
+    public String generateOptimizedSequence(final String filePath) throws BadInputFileException, IOException {
 
-        // first tag all orders to its possible categories.
-        final LocalTime firstLaunchTime = tagInput(orderList);
+        String outputFilePath = "";
+        try {
+            outputFilePath = parserService.getOutputFileName(filePath);
+            parserService.readFromInputFile(filePath).forEach(System.out::println);
+            List<OrderData> inputList = parserService.convertToOrderDataList(parserService.readFromInputFile(filePath));
 
-        // solve on the order delivery sequence for the NPR maximization
-        resequenceOrders(orderList, firstLaunchTime);
+            inputList.forEach(System.out::println);
 
-        // calculate lauch time
-        calculateLaunchTime(orderList, firstLaunchTime);
+            // first tag all orders to its possible categories.
+            final LocalTime firstLaunchTime = tagInput(inputList);
 
-        // generate the output file
-        generateOutput(orderList, filePath);
+            // resequence the order delivery priority for NPS maximization
+            resequenceOrders(inputList, firstLaunchTime);
+
+            // calculate lauch time
+            calculateLaunchTime(inputList, firstLaunchTime);
+
+            // generate the output file
+            generateOutput(inputList, outputFilePath);
+
+        } catch (final BadInputFileException e) {
+            e.printStackTrace();
+        } catch (final IOException e) {
+            e.printStackTrace();
+        }
+        return outputFilePath;
 
     }
 
@@ -73,25 +94,23 @@ public class DeliveryLaunchCalcualtion {
             final String outputLine = new StringBuilder(input.getId()).append(" ")
                     .append(input.getLaunchTime().format(DateTimeFormatter.ISO_LOCAL_TIME)).toString();
 
-            if(input.getTag().equals(OrderData.Tag.PROMOTER)){
+            if (input.getTag().equals(OrderData.Tag.PROMOTER)) {
                 numberOfPromoters += 1;
-            }else if(input.getTag().equals(OrderData.Tag.DETRACTOR)){
+            } else if (input.getTag().equals(OrderData.Tag.DETRACTOR)) {
                 numberOfDertactors += 1;
             }
-
 
             writer.write(outputLine + "\n");
 
         }
-        //write NPS calculation
-        Integer npsValue = (numberOfPromoters-numberOfDertactors)*100/orderList.size();
+        // write NPS calculation
+        Integer npsValue = (numberOfPromoters - numberOfDertactors) * 100 / orderList.size();
         String npsLine = new StringBuilder("NPS ").append(npsValue).toString();
         writer.write(npsLine);
 
         writer.close();
 
     }
-
 
     /**
      * calculate lauch time for each order in the list
@@ -104,14 +123,15 @@ public class DeliveryLaunchCalcualtion {
         LocalTime launchTime = firstLaunchTime;
         for (final OrderData input : orderList) {
             input.setLaunchTime(launchTime);
-            //calculate the launch time for the next delivery (last + to and fro for this delivery time)
-            launchTime.plusMinutes(2 * input.getTimeToLocation());
+            // calculate the launch time for the next delivery (last + to and fro for this
+            // delivery time)
+            launchTime = launchTime.plusMinutes(2 * input.getTimeToLocation());
         }
 
     }
 
     /**
-     * solve on the order delivery sequence for the NPR maximization
+     * solve on the order delivery sequence for the NPS maximization
      * 
      * @param orderList
      * @param firstLaunchTime
