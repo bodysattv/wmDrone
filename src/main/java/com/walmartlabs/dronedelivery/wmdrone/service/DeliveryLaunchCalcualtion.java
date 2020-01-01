@@ -49,12 +49,10 @@ public class DeliveryLaunchCalcualtion {
     public String generateOptimizedSequence(final String filePath) throws BadInputFileException, IOException {
 
         String outputFilePath = "";
-        final FileReadWriteUtil fileUtil = new FileReadWriteUtil();
         try {
             outputFilePath = parserService.getOutputFileName(filePath);
-            fileUtil.readFromInputFile(filePath).forEach(System.out::println);
             final List<OrderData> inputList = parserService
-                    .convertToOrderDataList(fileUtil.readFromInputFile(filePath));
+                    .convertToOrderDataList(FileReadWriteUtil.readFromInputFile(filePath));
 
             inputList.forEach(System.out::println);
 
@@ -68,7 +66,7 @@ public class DeliveryLaunchCalcualtion {
             calculateLaunchTime(inputList, firstLaunchTime);
 
             // generate the output file
-            fileUtil.generateOutput(inputList, outputFilePath);
+            FileReadWriteUtil.generateOutput(inputList, outputFilePath);
 
         } catch (final BadInputFileException e) {
             e.printStackTrace();

@@ -9,6 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.ShellOption;
 
 /**
  * This is entry class. Create a Spring boot application alongwith a Shell
@@ -51,11 +52,18 @@ public class WalmartDemoApplicationCommands {
 	 * 
 	 * @param n
 	 * @return
+	 * @throws IOException
 	 */
 	@ShellMethod("<n> (Creates mock n inputs in a file)")
-	public String createMockInput(final int n) {
-        final FileReadWriteUtil fileUtil = new FileReadWriteUtil();
-		return fileUtil.createMockInput(n);
+	public String createMockInput(@ShellOption() int n, @ShellOption(defaultValue = "99") int maxSteps,
+			@ShellOption(defaultValue = "00") int minHour, @ShellOption(defaultValue = "24") int maxHour)
+			throws IOException {
+		return FileReadWriteUtil.createMockInput(n, maxSteps, minHour, maxHour);
 	}
 
+
+	@ShellMethod(value = "Add numbers.", key = "sum")
+    public int add(int a, @ShellOption(defaultValue="99") int b) {
+        return a + b;
+    }
 }

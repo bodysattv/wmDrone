@@ -22,7 +22,6 @@ public class InputFileParser {
 
   Logger logger = LoggerFactory.getLogger(InputFileParser.class);
 
-  private FileReadWriteUtil fileUtil = new FileReadWriteUtil();
 
   /**
    * Create an output file name. Exception if input file does not exist.

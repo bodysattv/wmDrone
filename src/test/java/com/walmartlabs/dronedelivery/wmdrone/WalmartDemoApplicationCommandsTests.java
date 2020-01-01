@@ -24,8 +24,7 @@ class WalmartDemoApplicationCommandsTests {
 
 		final String line = "Hi";
 		try {
-			final FileReadWriteUtil fileUtil = new FileReadWriteUtil();
-			final List<String> parsedLines = fileUtil.readFromInputFile("src/main/resources/input.txt");
+			final List<String> parsedLines = FileReadWriteUtil.readFromInputFile("src/main/resources/input.txt");
 			assertThat(parsedLines, IsNull.notNullValue());
 			assertThat(parsedLines, hasItems(line));
 		} catch (final IOException e) {
