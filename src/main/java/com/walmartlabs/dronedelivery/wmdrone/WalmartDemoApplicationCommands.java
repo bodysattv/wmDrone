@@ -42,7 +42,7 @@ public class WalmartDemoApplicationCommands {
 	 * @throws BadInputFileException
 	 */
 	@ShellMethod("</path/to/file> (Creates the output file with launch schedule and NPS)")
-	public String createSchedule(final String filePath) throws BadInputFileException, IOException {
+	public String createLaunchSchedule(final String filePath) throws BadInputFileException, IOException {
 
 		return delCal.generateOptimizedSequence(filePath);
 	}

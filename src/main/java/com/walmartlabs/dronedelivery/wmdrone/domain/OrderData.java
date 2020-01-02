@@ -9,13 +9,22 @@ public class OrderData {
         PROMOTER, NUETRAL, DETRACTOR;
     }
 
+    // Fields from the input file
     private String id;
     private String location;
-    private Integer timeToLocation;
     private String timeStampStr;
-    private LocalTime timeStamp;
-    private Tag tag;
+
+    // Field required for the output file
     private LocalTime launchTime;
+
+    // fields required for calculation
+
+    // time taken for the drone to reach to a customer location in minutes
+    private Integer timeToLocation;
+    // converted time format for calculation
+    private LocalTime timeStamp;
+    // Categories for customer satisfaction (promoter, nuetral, detractor)
+    private Tag tag;
 
     public String getId() {
         return id;
@@ -73,8 +82,7 @@ public class OrderData {
         this.location = location;
     }
 
-
     public String toString() {
-        return ( id + " " + timeToLocation + " " + timeStampStr + " " + tag + " " + launchTime);
-}
+        return (id + " " + timeToLocation + " " + timeStampStr + " " + tag + " " + launchTime);
+    }
 }
