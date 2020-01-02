@@ -102,19 +102,8 @@ $$
 	T = Time offest of a given order prior to the start of delivery. 
     
 	so if the delivery is done in this following sequence: 
-	$$(t_1,T_1), (t_2,T_2), .... (t_n,T_n)
-    $$
-	and first launch timestamp is T0
 
-	The launch time or time of departture for kth delivery should be
-$$
-\tau_{k,launch} = T0 + 2* \sum_{i=1}^{k-1} t_i 
-$$
-
-The total time delay in Kth delivery 
-$$= T0  + 2* \sum_{i=1}^{k-1} t_i -T_k+ t_k
-$$
-
+	![mathCaptue](resouces/../src/main/resources/eqn.png)
 Notice that in calculation of total time for a given order, only t for other orders enters, this implies that ordering by T does not matter. As long as with T, we identify all potential promoters, we can simply sort out the order list by t alone, and that should suffice. Similarly we repeat the process for nuetral batch next. And we have this variation of TSP/VRP solved in O(n) time. 
 
 The overview of process flow is implemented as shown in a simplified BPMN. 
