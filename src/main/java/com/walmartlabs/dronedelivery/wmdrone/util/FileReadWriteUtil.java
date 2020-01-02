@@ -87,7 +87,7 @@ public class FileReadWriteUtil {
    */
   public static void generateOutput(final List<OrderData> orderList, final String fileName) throws IOException {
     Integer numberOfPromoters = 0;
-    Integer numberOfDertactors = 0;
+    Integer numberOfDetractors = 0;
     final BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
     for (final OrderData input : orderList) {
       final String outputLine = new StringBuilder(input.getId()).append(" ")
@@ -96,14 +96,14 @@ public class FileReadWriteUtil {
       if (input.getTag().equals(OrderData.Tag.PROMOTER)) {
         numberOfPromoters += 1;
       } else if (input.getTag().equals(OrderData.Tag.DETRACTOR)) {
-        numberOfDertactors += 1;
+        numberOfDetractors += 1;
       }
 
       writer.write(outputLine + "\n");
 
     }
     // write NPS calculation
-    final Integer npsValue = (numberOfPromoters - numberOfDertactors) * 100 / orderList.size();
+    final Integer npsValue = (numberOfPromoters - numberOfDetractors) * 100 / orderList.size();
     final String npsLine = new StringBuilder("NPS ").append(npsValue).toString();
     writer.write(npsLine);
 

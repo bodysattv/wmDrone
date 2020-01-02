@@ -1,36 +1,47 @@
 # wmDrone
 Walmart Drone Delivery
 
-Build:
-mvn clean install -DskipTests
 
+**Build:**
+```
+mvn clean install -DskipTests
+```
 it will generate an executable jar in the target folder
 
-Run: 
+**Run:**
+``` 
 java -jar target/wmdrone-0.0.1-SNAPSHOT.jar
-
+```
 This will create a shell promt for command line interface
 
-Example run from the command prompt:
-
+*Example run from the command prompt:
+*
 To create a mock test file:
+```
 shell:> create-mock-input --n 20 --max-steps 20 --min-hour 03 --max-hour 11
-
+```
 To run the launch schedule program
-create-schedule <path/to/repo>/wmDrone/src/main/resources/mock-input.txt
+```
+shell:> create-schedule <path/to/repo>/wmDrone/src/main/resources/mock-input.txt
+```
+
 
 Delivery Satisfaction Problem
 	Grid village
 		each block 1 min
 	10-6 delivery
 	input file
-		WM001 N11W5 05:11:50
-		WM002 S3E2 05:11:55
-		WM003 N7E50 05:31:50
-		WM004 N11E5 06:11:50
+  | ID    | Location | TimeStamp |
+  | ----- | -------- | --------- |
+  | WM001 | N11W5    | 05:11:50  |
+  | WM002 | S3E2     | 05:11:55  |
+  | WM003 | N7E50    | 05:31:50  |
+  | WM004 | N11E5    | 06:11:50  |
 		id.   VmHn  Time of Order
     
-    
+    This is a variation of the classic Walmart Travelling Salesman Problem or Vehicle Routing Problem, which is classified as NP-Complete. 
+
+
 Assumptions
 	       
    1. There is no advantage in maintaining any sequence within promoter's, neutral's or detractor's delivery.

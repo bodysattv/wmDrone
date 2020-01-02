@@ -101,16 +101,4 @@ public class InputFileParser {
     return datum;
   }
 
-  /**
-   * 
-   * @param n
-   * @return
-   */
-public String createMockInput(int n) {
-  String filePath = "src/main/resources/";
-  StringBuilder filePathBldr = new StringBuilder(filePath);
-  
-	return null;
-}
-
 }
