@@ -9,15 +9,14 @@ Optimization for Delivery Satisfaction, given
 - Grid village & One drone
 - Uniform blocks separated by unit length/time
 - 6AM to 10PM delivery
-- Input file sample as follows:
+- Input file sample as follows:  
 
-  
-  | ID    | Location | Timestamp |
-  | ----- | -------- | --------- |
-  | WM001 | N11W5    | 05:11:50  |
-  | WM002 | S3E2     | 05:11:55  |
-  | WM003 | N7E50    | 05:31:50  |
-  | WM004 | N11E5    | 06:11:50  |
+| ID    | Location | Timestamp |
+| ----- | -------- | --------- |
+| WM001 | N11W5    | 05:11:50  |
+| WM002 | S3E2     | 05:11:55  |
+| WM003 | N7E50    | 05:31:50  |
+| WM004 | N11E5    | 06:11:50  |
 
 ### Complexity   
     
@@ -43,7 +42,8 @@ In short, the algorithm will start with taking a first cut among the potential p
 
 	If total number of entries is N; p is number of promoters and n is number of neutrals, then 
 
-![equation](http://latex.codecogs.com/png.latex?NPS=\frac{(p-d))*100}{N};d=N-p-n))
+![equation](http://latex.codecogs.com/png.latex?NPS=((p-d)/N)*100))  where 
+![equation](http://latex.codecogs.com/png.latex?d=N-p-n)
 	
 
 2. Input is coming at the beginning of delivery as a flat file(its not a stream and has full information needed for the problem); the file can be assumed to be available just after the last order entry. And file time-stamp range is assumed to flow between 00:00:00 to 23:59:59 (belonging to the same day)
@@ -84,8 +84,9 @@ In short, the algorithm will start with taking a first cut among the potential p
 If the delivery is done in this sequence: ![equation](http://latex.codecogs.com/png.latex?(t_{1},T_{1}),(t_{2},T_{2}),...(t_{n},T_{n})) 
 	So the 	![equation](http://latex.codecogs.com/png.latex?k^{th}) delivery will happen after the drone has made back from k-1 destinations in this sequence; that is at time = 
 	
-![equation](http://latex.codecogs.com/png.latex?\tau+2*\sum_{i=1}^{k-1}t_{i}) ;
-where ![equation](http://latex.codecogs.com/png.latex?\tau) is the time-stamp of the first launch.
+![equation](http://latex.codecogs.com/png.latex?\tau+2*\sum_{i=1}^{k-1}t_{i}) 
+
+;where ![equation](http://latex.codecogs.com/png.latex?\tau) is the time-stamp of the first launch.
 
 Notice that, once a delivery sequence is determined, the launch time of a delivery does not depend on any of the time-stamps. NPS however, depends upon the time-stamp of that order. For the kth delivery, total time taken for a customer from order to delivery is 
 
